@@ -1,0 +1,27 @@
+{
+    "name": "liveth/laravel-ticket",
+    "description": "An Open-Source ticket support system for laravel.",
+    "authors": [
+        {
+            "name": "Alihan Pehlivan",
+            "email": "alihan.pehlivan@students.plymouth.ac.uk",
+            "homepage": "https://alihanpehlivan.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Ahmet Celikezer",
+            "email": "ahmet@ahmetcelikezer.com",
+            "homepage": "https://ahmetcelikezer.com",
+            "role": "Developer"
+        }
+    ],
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Liveth\\laravelTicket": "src/"
+        }
+    }
+}
