@@ -1,0 +1,94 @@
+> Destek Sistemi
+
+>> Süper Kullanıcı
+	Sistemde sadece 1 adet bu hesaptan bulunabilir, bu hesap sistem yöneticisine(sahibine) ait olmalıdır. Diğer hiçbir hesabın sahip olamayacağı üst düzey yöneticileri silme, düzenleme veya oluşturma yetkisine sahip olurlar ve hiçbir kullanıcı tarafından; silinemez, düzenlenemez, ayarlarına bağlı olarak gözlenemez ve müdehale edilemezler.
+
+	Varsayılan Kullanıcı Adı	: admin
+	Varsayılan Şifre			: admin
+
+	Eğer bu kullanıcı zorla kodlama ile zarar gördü veya veri tabanından elle silindiyse, bir süper kullanıcı oluşturmak için aşağıdaki komutu sunucu terminalinden kullanarak yeni bir süper kullanıcı oluşturulabilir. Ancak bu komut sadece bir süper kullanıcı yok ise, yani veri tabanından elle silindiyse oluşturulabilir. Zaten aktif bir süper kullanıcı varsa komut çalışmayacaktır.
+
+	# php artisan ticket:create-su
+
+	Komutu kullandığınızda size kullanıcıya ilişkin birkaç soru sorduktan sonra oluşturma işlemini tamamlayacaktır.
+
+
+>> Üyeler İçin
+	Sisteme giriş yapmış kullanıcılar herhangi bir soruya tabi olmaksızın direkt olarak sistemdeki bilgileri ile birlikte talep açabilirler. Talep açılırken
+		alınacak veriler ise;
+		
+							* (Kullanıcı) 	İlgili karakter ID (Eğer hesap ile ilgili bir sorun ise belirtilmesi gerekmez)
+							* (Kullanıcı) 	Talep türü : Yöneticiler tarafından oluşturulmuş kategorileri içerir.
+							* (Sistem)    	Hesap ID
+							* (Sistem)		Bağlı Hesaplar ve karakterleri
+							* (Sistem)		Kayıtlı olduğu lonca
+							* (Sistem)		Para miktarları [! Talep oluşturulduğu andaki yang/EP/EM miktarları]
+							* (Sistem)		Envanter Dökümü [! Talep oluşturulduğu andaki bağlı tüm karakterler için depo, envanter ve pazar dökümleri]
+							* (Sistem)		EXP Dökümü [! Talep oluşturulduğu andaki karakterin EXP ve seviye bilgisi]
+							
+>> Üye Girişi Yapmayanlar İçin
+	Sisteme giriş yapmamış kullanıcılar sadece belirtilen kategorilerde talep açabilirler. Alınacak bilgiler;
+	
+							* (Kullanıcı)	Hesap ID
+							* (Kullanıcı)	Karakter isimleri
+							* (Kullanıcı) 	Talep türü [! Giriş yapamayanlara kısıtlanmış bilgiler.]
+							
+### --- ###
+
+> Destek Admin
+
+>> Gruplar
+	En üst düzey yönetici olarak açılmış hesap veya yetkilendirilmiş kişi(ler) grup oluşturma yetkisine sahiptir. Oluşturulan gruplere yetkiler atanır ve bu gruplara atanmış kullanıcılar otomatik olarak bu yetkilere sahip olabilirler. Gruplar güce sahiptirler ve aralarındaki alt-üst derecelendirmesi bu güç değişkenine bağlı olarak kontrol edilir. En üst düzey hesap 999999 güce sahiptir ve ikincil bir hesap bu güce sahip olamaz. En düşük güç ise 1 olarak ayarlanabilir.
+	
+	-- Grup Yetkileri;
+		* Tümü		  				: group.*			--> Tüm yetkiler
+		* Oluşturma	  				: group.create		--> Yeni bir grup oluşturabilir
+		* Silme		  				: group.remove		--> Varolan bir grubu silebilir
+		* Düzenleme	  				: group.update		--> Varolan bir grubu düzenleyebilir
+		* Gruba Yetki Atama 		: group.assign		--> Varolan bir gruba yetki atayabilir
+		* Gruptan Yetki Kaldırma 	: group.revoke		--> Varolan bir gruba atanmış yetkiyi kaldırabilir
+		
+>> Yetkiler
+	Kullanıcılara tek tek yetki eklemek için kullanılırlar. Kullanıcılar ait oldukları gruba ek olarak bu yöntem ile belirtilmiş yetkilere de sahip olabilecekler.
+		Ek olarak eklenmiş yetkiler söz konusu kullanıcının dahil olduğu gruptaki diğer kullanıcıları etkilemeyecektir.
+		
+	-- Yetki Yetkileri;
+		* Tümü		        				: permission.*			--> Tüm yetkiler
+		* Oluşturma	        				: permission.create		--> Yeni bir yetki sınıfı oluşturabilir
+		* Silme		        				: permission.remove		--> Varolan bir yetki sınıfını silebilir
+		* Düzenleme		    				: permission.update		--> Varolan bir yetki sınıfını düzenleyebilir
+		* Kullanıcıya atama 				: permission.assign     --> Kullanıcılara yetki verebilir
+		* Kullanıcıdan yetki kaldırabilir 	: permission.revoke     --> Kullanıcıların yetkisini kaldırabilir
+		
+>> İstatistik
+	CRON zamanlayıcı ile çalışır. En üst düzey kullanıcının veya yetkiye sahip kişinin belirleyeceği saatte yenilenir. Sistem günlük olarak destek yetkililerinin okuduğu / cevap verdiği / kapatılan(çözülen) / atanan / başkasının atadığı / başkasına atadığı taleplerin sayılarını baz alan bir grafik oluşturur.
+	
+	-- İstatistik Yetkileri;
+		* Tümü								: statistics.*				--> Tüm yetkiler
+		* Sistem Ayarı (CRON, vs...)		: statistics.system			--> İstatistik ile alakalı kritik ayarları değiştirebilir
+		* Ayarları Değiştirme				: statistics.settings		--> İstatistik ile ilgili genel ayarları değiştirebilir
+		* Kendi istatitiğini görüntüleme 	: statistics.view-own		--> Kendi istatitiğini görüntüleyebilir
+		* Tüm istatistiği görüntüleme		: statistics.view-all		--> Herkesin istatistiğini görüntüleyebilir
+		* Alt güç istatistiği görüntüleme	: statistics.view-lower		--> Kendinden daha az kıdemli(güçlü) kişilerin istatistiğini görüntüleyebilir
+		
+>> Atamalar
+	Talepler sistem tarafından veya kullanıcılar tarafından farklı kullanıcılara atanabilir. Atanma algoritması yeni talepleri otomatik olarak atamak için şu yolu izler; ilk önce sistemdeki tüm yetkililerin aktif talep sayısına bakar, kullanıcının o gün çözdüğü talep sayısının 4/1'ini kullanıcıya ekler, en düşük olan kullanıcıya yeni talebi atar. Eğer en düşük talep sayısı olan kullanıcıların talep sayıları eşit ise veya tüm kullanıcılar aynı sayıda talebe sahip ise sistem bu kullanıcılar arasında rastgele bir atama yapar.
+	
+	Kullanıcılar çözemediği veya bilgisi olmadığı talepleri sistemdeki diğer kullanıcılara atayabilir.
+	
+	-- Atama Yetkileri;
+		* Tümü 												: assignment.*  			--> Tüm yetkiler
+		* Talep Almayı  Kapatma / Açma 						: assignment.receive-self	--> Sadece kendi hesabının başkasından talep alamamasını ayarlar
+		* Talep Almayı  Başkaları İçin Kapatma / Açma 		: assignment.receive-all    --> Herhangi bir hesabın talep almasını kapatma yetkisini ayarlayabilir
+		* Talep Atamayı Kapatma / Açma						: assignment.assign			--> Herhangi bir hesabın talep atayabilmesi yetkisini ayarlar
+
+>> Kullanıcı
+	Talep atan kayıtlı ve kayıtsız kullanıcıları için yapılabilecek müdehalelere ilişkin yetkileri içerir.
+
+	-- Kullanıcı Yetkileri;
+		* Tümü 									: customer.*  					--> Tüm yetkiler
+		* Talep Oluşturmasını Süreli Engelleme 	: customer.ban-create-limited	--> Belirli bir süre için talep oluşturmasını engeller
+		* Talep Oluşturmasını Tamamen Engelleme	: customer.ban-create			--> Kullanıcının talep oluşturmasını süresiz engeller
+		* IP Bazlı Engelleme Yapabilme			: customer.ban-ip				--> Süreli veya süresiz engellere IP bazında engelleme yapabilme
+		* Kullanıcı Bilgilerini Düzenleme		: customer.edit					--> Kullanıcı bilgilerini düzenleyebilir
+		* Kullanıcıyı Tamamen Silme				: customer.remove				--> Kullanıcıya ait tüm bilgileri silebilir [ticket.remove yetkisi gerekmez!]

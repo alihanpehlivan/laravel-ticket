@@ -21,7 +21,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Liveth\\laravelTicket": "src/"
+            "Liveth\\laravelTicket\\": "src/"
         }
     }
 }
