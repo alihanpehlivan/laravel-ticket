@@ -17,6 +17,10 @@ class TicketManager extends LaravelTicket{
         //
     }
 
+    public function list(){
+        //
+    }
+
     public function update() {
         //
     }
