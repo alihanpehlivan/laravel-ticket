@@ -127,22 +127,22 @@ To view the requested ticket is as simple as making the flick. How simple, this 
     $flick = $ticket->read();
 ```
 So <b>read</b> method returns this JSON object
-```json
+```js
         {
-            error       : false,
-            errors      : [],
-            title       : "Ticket Subject",
-            detail      : "This is the long text for my problem",
-            type        : {'id' : 2, 'title' : 'login_problem', 'text' : 'Login Problem'},
-            owner       : {
+            'error'       : false,
+            'errors'      : [],
+            'title'       : "Ticket Subject",
+            'detail'      : "This is the long text for my problem",
+            'type'        : {'id' : 2, 'title' : 'login_problem', 'text' : 'Login Problem'},
+            'owner'       : {
                 'login'     : true, 
                 'id'        : 775, 
                 'name'      : 'Ahmet',
                 'surname'   : 'Çelikezer',
                 'email'     : 'ahmetcelikezer@icloud.com'
                 },
-            date        : {'created_at' : '2019-01-14 17:57:16', 'updated_at' : '2019-01-15 13:00:38'},
-            externals   : {'user_defined_variable' : 'user_defined_value', ...}
+            'date'        : {'created_at' : '2019-01-14 17:57:16', 'updated_at' : '2019-01-15 13:00:38'},
+            'externals'   : {'user_defined_variable' : 'user_defined_value', ...}
         }
 ```
 > When any staff viewed and ticket, this will be recorded as "XXX is readed this ticket", if you have a permission. You can view ticket anonymously.
