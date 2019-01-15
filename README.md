@@ -86,6 +86,7 @@ You can list tickets with this method.
 
 ##### owner
 You can list tickets by its owner, the default value is "me", it returns with the tickets assigned the current staff and here are the values of the owner parameter can take;
+
 |Value|Description|Type|
 |-----|-----------|----|
 |me|It is the default value, it returns the tickets assigned to the current sessions owner.|String|
