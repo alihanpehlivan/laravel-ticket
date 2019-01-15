@@ -8,6 +8,7 @@ An Open-Source ticket support system for laravel.
 * [Touching to Tickets](#touching-to-tickets)
     * [Listing Tickets](#listing-tickets)
     * [View Ticket](#viewing-ticket)
+    * [Assigning Tickets](#assigning-tickets)
 * [Permissions](#permissions)
     * [Default Permissions](#default-permissions)
         * [Group Permissions](#group-permissions)
@@ -80,7 +81,7 @@ This code below is for guest's ticket creation. Extra required inputs stated as 
 ## Listing Tickets
 
 ### Listing All
-You can list tickets with this method.
+You can list tickets with this method, by the default only unsolved tickets will be returning.
 
 #### List Method's Parameters
 
@@ -92,6 +93,7 @@ You can list tickets by its owner, the default value is "me", it returns with th
 |me|It is the default value, it returns the tickets assigned to the current sessions owner.|String|
 |all|It returns all the tickets on the system which you have access privileges.|String|
 |[id]|It returns all the tickets which the given staff id has, you can do it for the staff which has id=13 is like <b>->list(['owner'=>13])</b>|Integer|
+|[ids]|You can specify multiple ids to get their tickets. Like this; <b>list(['owner' => [13, 12, 53, ...]])</b>|Integer Array
 
 ```php
 <?php
@@ -103,13 +105,20 @@ You can list tickets by its owner, the default value is "me", it returns with th
     $tickets = $ticketManager->list(['owner' => 'all']);
 
 ```
+##### paginate
+When you got a request to list tickets, server throws 15 tickets per request by default, however you can change this count;
+
 If you want to change paginate count, you can use "paginate" parameter. For example, as you can see, we set our paginate value to 20;
 ```php
-    $ticketManager->list(['paginate' => 20, 'owner' => 'all']);
+    $ticketManager->list(['paginate' => 50, 'owner' => 'me']);
 ```
+> As you can see, you are able to use multi parameters. The code above will return with the tickets current session has, and 50 tickets per request.
+
+> You can handle pagination just same like [laravel](https://laravel.com/docs/5.7/pagination#displaying-pagination-results)  has.
 
 ### Listing by Category
 
+> Listing is in proggess.
 ---
 
 ## Touching to Tickets
@@ -160,4 +169,33 @@ Just add array value with 'anonymous' with true. For Ex:
     $ticket->id = 5;                                // Requested ticket id
     $flick = $ticket->read(['anonymous' => true]);  // Read as anonymous
     // Return is same
+```
+## Assigning Tickets
+You can assign / re-assign tickets to other staffs with this method. 
+
+|Paramater|Description|Type|
+|---------|-----------|----|
+|to|Target staff id to assign.|Integer|
+|ticket|Ticket id to change it's staff|Integer|
+|message|Newly assigned staff see this message, messages can be shown staffs only.|String|
+
+For ex;
+<i>Staff who his id is 337 wants to re-assign the ticket which it id is 66 to other staff who her id is 48. So the code is below;</i>
+
+
+```php
+<?php
+    
+    use Liveth\laravelTicket\core\TicketManager;    // Required Class
+
+    $ticket = new TicketManager;
+
+    $ticket->update([
+        'assign' => [
+            'to'        => 48, 
+            'ticket'    => 66,
+            'message'   => "I'm on vacation, can you handle with him. Thanks!"
+        ]
+    ]);
+    
 ```
